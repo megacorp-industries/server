@@ -32,7 +32,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          CoreOS
+          coreos
     - path: /etc/profile.d/systemd-pager.sh
       mode: 0644
       contents:
@@ -50,11 +50,11 @@ storage:
       mode: 0644
       contents:
         inline: |
-          # Set huge pages for monerod and p2pool
+          # Set huge pages for greater control over memory
           vm.nr_hugepages=3072
     - path: /etc/ssh/sshd_config.d/20-enable-passwords.conf
       mode: 0644
       contents:
         inline: |
-          # Enable SSH password login
-          PasswordAuthentication yes
+          # Disable SSH password login
+          PasswordAuthentication no
