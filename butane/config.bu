@@ -8,7 +8,7 @@ passwd:
       groups:
         - "sudo"
         - "docker"
-      password_hash: $y$j9T$IQP78KGxD6zll8X1IpO381$u85joH0LBE2exJGeYm4y1DzeYvY1pKkJhvUlxCBomu3
+      password_hash: $y$j9T$IQP78KGxD6zll8X1IpO381$u85joH0LBE2exJGeYm4y1DzeYvY1pKkJhvUlxCBomu3 #password is changeme
 systemd:
   units:
     - name: docker.service
