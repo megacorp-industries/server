@@ -53,7 +53,7 @@ storage:
         inline: |
           # Set huge pages for greater control over memory
           vm.nr_hugepages=3072
-    - path: /etc/ssh/sshd_config.d/20-enable-passwords.conf
+    - path: /etc/ssh/sshd_config.d/20-disable-passwords.conf
       mode: 0644
       contents:
         inline: |
