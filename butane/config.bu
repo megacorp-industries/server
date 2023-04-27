@@ -1,8 +1,10 @@
 variant: fcos
-version: 1.0.0
+version: 1.1.0
 passwd:
   users:
     - name: admin
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOu8USZbNe+LjLmMVAP/F6s/6OwS9nDY36o4WHPMdmbS
       groups:
         - "sudo"
         - "docker"
