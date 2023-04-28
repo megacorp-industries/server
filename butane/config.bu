@@ -17,7 +17,7 @@ systemd:
       enabled: true
     - name: containerd.service
       enabled: true
-    - name: layer-nano.service
+    - name: layer-python3.service
       enabled: true
       contents: |
         [Unit]
