@@ -4,9 +4,8 @@ passwd:
   users:
     - name: admin
       ssh_authorized_keys:
-        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOu8USZbNe+LjLmMVAP/F6s/6OwS9nDY36o4WHPMdmbS
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILmBJpaKFwNMjmUcoLiZ+XO3YKpSl23ebtfkOOKicYF3
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBwhxBF/rXQThpwyRCdfJGdlQpig6EtFQEqFPROGl/jH
-        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN+dcdIbtejpk5+XUJk35E9oc/3D5gMzVUiqX6UbifFd
       groups:
         - "sudo"
         - "docker"
