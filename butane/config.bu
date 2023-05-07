@@ -17,22 +17,22 @@ systemd:
       enabled: true
     - name: containerd.service
       enabled: true
-#    - name: layer-python3.service
-#      enabled: true
-#      contents: |
-#        [Unit]
-#        Description=Layer python3 with rpm-ostree
-#        # We run after `systemd-machine-id-commit.service` to ensure that
-#        # `ConditionFirstBoot=true` services won't rerun on the next boot.
-#        After=systemd-machine-id-commit.service
-#
-#        [Service]
-#        Type=oneshot
-#        RemainAfterExit=yes
-#        ExecStart=/usr/bin/rpm-ostree install python3 --reboot
-#
-#        [Install]
-#        WantedBy=multi-user.target
+    - name: layer-python3.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Layer python3 with rpm-ostree
+        # We run after `systemd-machine-id-commit.service` to ensure that
+        # `ConditionFirstBoot=true` services won't rerun on the next boot.
+        After=systemd-machine-id-commit.service
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/usr/bin/rpm-ostree install python3 --reboot
+
+        [Install]
+        WantedBy=multi-user.target
     - name: serial-getty@ttyS0.service
       dropins:
       - name: autologin-core.conf
