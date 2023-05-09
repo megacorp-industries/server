@@ -1,0 +1,46 @@
+version: '3.8'
+
+volumes:
+  db:
+  nextcloud:
+  tor-keys:
+
+services:
+  db:
+    image: mariadb
+    container_name: db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=changeme
+      - MYSQL_PASSWORD=changeme
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - APACHE_DISABLE_REWRITE_IP=1
+    restart: always
+
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    volumes:
+      - nextcloud:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - MYSQL_PASSWORD=changeme
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+
+  tor:
+    image: goldy/tor-hidden-service:latest
+    container_name: tor
+    restart: unless-stopped
+    links:
+      - nextcloud
+    environment:
+      NEXTCLOUD_TOR_SERVICE_HOSTS: 80:nextcloud:80
+      NEXTCLOUD_TOR_SERVICE_VERSION: '3'
+    volumes:
+      - tor-keys:/var/lib/tor/hidden_service/
