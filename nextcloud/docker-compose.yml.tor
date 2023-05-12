@@ -13,11 +13,8 @@ services:
     volumes:
       - db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=changeme
-      - MYSQL_PASSWORD=changeme
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
       - APACHE_DISABLE_REWRITE_IP=1
+    env_file: .env
     restart: always
 
   nextcloud:
@@ -27,11 +24,7 @@ services:
       - nextcloud:/var/www/html
     depends_on:
       - db
-    environment:
-      - MYSQL_PASSWORD=changeme
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=db
+    env_file: .env
 
   tor:
     image: goldy/tor-hidden-service:latest
