@@ -24,7 +24,10 @@ services:
       - nextcloud:/var/www/html
     depends_on:
       - mariadb
+    environment:
+      - MYSQL_HOST=mariadb
     env_file: .env
+    restart: always
 
   tor:
     image: goldy/tor-hidden-service:latest

@@ -25,4 +25,7 @@ services:
       - mariadb
     ports:
       - 8080:80
+    environment:
+      - MYSQL_HOST=mariadb
     env_file: .env
+    restart: always
