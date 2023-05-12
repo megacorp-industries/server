@@ -1,16 +1,16 @@
 version: '3.8'
 
 volumes:
-  db:
+  mariadb:
   nextcloud:
 
 services:
-  db:
+  mariadb:
     image: mariadb
-    container_name: db
+    container_name: mariadb
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     volumes:
-      - db:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     environment:
       - APACHE_DISABLE_REWRITE_IP=1
     env_file: .env
@@ -22,7 +22,7 @@ services:
     volumes:
       - nextcloud:/var/www/html
     depends_on:
-      - db
+      - mariadb
     ports:
       - 8080:80
     env_file: .env
