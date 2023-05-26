@@ -2,19 +2,16 @@ variant: fcos
 version: 1.1.0
 passwd:
   users:
-    - name: admin
+    - name: megacorp
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILmBJpaKFwNMjmUcoLiZ+XO3YKpSl23ebtfkOOKicYF3
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBwhxBF/rXQThpwyRCdfJGdlQpig6EtFQEqFPROGl/jH
       groups:
-        - "sudo"
-        - "docker"
+        - "wheel"
       password_hash: $y$j9T$IQP78KGxD6zll8X1IpO381$u85joH0LBE2exJGeYm4y1DzeYvY1pKkJhvUlxCBomu3
       #password is changeme
 systemd:
   units:
-    - name: docker.service
-      enabled: true
     - name: containerd.service
       enabled: true
     - name: layer-python3.service
