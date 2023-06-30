@@ -1,0 +1,42 @@
+version: '3'
+services:
+  node:
+    image: node
+    working_dir: /home/node/app
+    container_name: node
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./node-app:/home/node/app:Z
+    command: "npm start"
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD} 
+    volumes:
+      - ./php-data.sql:/docker-entrypoint-initdb.d/php-data.sql:Z #This line is what imports the sql dump into the mariadb container
+      - mariadb-data:/var/lib/mysql #This line creates a docker volume so database changes persist across containers recreations
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Darwin
+      - URL=${URL}
+      - VALIDATION=http
+      - CERTPROVIDER=zerossl
+      - EMAIL=${EMAIL}
+    volumes:
+      - ./swagdata:/config:Z 
+    ports:
+      - 443:443
+      - 80:80
+
+volumes:
+  mariadb-data:
