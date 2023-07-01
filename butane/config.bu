@@ -28,7 +28,8 @@ systemd:
       enabled: true
       contents: |                       
         [Unit]                          
-        Description=Install Python RPM                                             After=network-online.target
+        Description=Install Python RPM
+        After=network-online.target
         Wants=network-online.target
         [Service]                       
         Type=oneshot                                                             
