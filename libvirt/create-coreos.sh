@@ -1,6 +1,6 @@
 #!/bin/sh
 
-IGN_CONFIG=/var/KVM/config.ign
+IGN_CONFIG=/var/lib/libvirt/configs/config.ign
 IMAGE=/var/lib/libvirt/images/coreos38.qcow2
 VM_NAME=node$1
 VCPUS=2
