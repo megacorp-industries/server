@@ -4,33 +4,19 @@ passwd:
   users:
     - name: megacorp
       ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMgc7bhCmAgYvB9I9P9xUyftjcrq/EI6LgiUgJmcNlX
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICBgdj9uCfcVT8rI7xN3/+lBg7XayCyEz2bICnSRd3hq
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBaiOQdDTSs9Z3d3BXpvCgshPX45VFhPequBCJIaiKex
       groups:
         - "wheel"
       password_hash: $y$j9T$IQP78KGxD6zll8X1IpO381$u85joH0LBE2exJGeYm4y1DzeYvY1pKkJhvUlxCBomu3
       #password is changeme
+
 systemd:
   units:
-    - name: containerd.service
-      enabled: true
-    - name: layer-python3.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=Layer python3 with rpm-ostree
-        # We run after `systemd-machine-id-commit.service` to ensure that
-        # `ConditionFirstBoot=true` services won't rerun on the next boot.
-        After=systemd-machine-id-commit.service
-
-        [Service]
-        Type=oneshot
-        RemainAfterExit=yes
-        ExecStart=/usr/bin/rpm-ostree install python3 --reboot
-
-        [Install]
-        WantedBy=multi-user.target
     - name: serial-getty@ttyS0.service
       dropins:
-      - name: autologin-core.conf
+      - name: autologin-megacorp.conf
         contents: |
           [Service]
           # Override Execstart in main unit
@@ -38,6 +24,22 @@ systemd:
           # Add new Execstart with `-` prefix to ignore failure
           ExecStart=-/usr/sbin/agetty --autologin megacorp --noclear %I $TERM
           TTYVTDisallocate=no
+    - name: install-python.service
+      enabled: true
+      contents: |                       
+        [Unit]                          
+        Description=Install Python RPM 
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]                       
+        Type=oneshot                                                             
+        ExecStart=/usr/bin/rpm-ostree install python3                    
+        ExecStart=/usr/sbin/reboot
+
+        [Install]
+        WantedBy=multi-user.target
+
 storage:
   files:
     - path: /etc/hostname
@@ -58,15 +60,47 @@ storage:
           # Raise console message logging level from DEBUG (7) to WARNING (4)
           # to hide audit messages from the interactive console
           kernel.printk=4
-    - path: /etc/sysctl.d/20-hugepages.conf
-      mode: 0644
-      contents:
-        inline: |
-          # Set huge pages for greater control over memory
-          vm.nr_hugepages=3072
     - path: /etc/ssh/sshd_config.d/20-disable-passwords.conf
       mode: 0644
       contents:
         inline: |
           # Disable SSH password login
           PasswordAuthentication no
+    - path: /etc/dnf/modules.d/cri-o.module
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          [cri-o]
+          name=cri-o
+          stream=1.17
+          profiles=
+          state=enabled
+    # YUM repository for kubeadm, kubelet and kubectl
+    - path: /etc/yum.repos.d/kubernetes.repo
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          [kubernetes]
+          name=Kubernetes
+          baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+          enabled=1
+          gpgcheck=1
+          repo_gpgcheck=1
+          gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+            https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    # configuring automatic loading of br_netfilter on startup
+    - path: /etc/modules-load.d/br_netfilter.conf
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: br_netfilter
+    # setting kernel parameters required by kubelet
+    - path: /etc/sysctl.d/kubernetes.conf
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          net.bridge.bridge-nf-call-iptables=1
+          net.ipv4.ip_forward=1
