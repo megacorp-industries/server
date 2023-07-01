@@ -28,13 +28,16 @@ systemd:
       enabled: true
       contents: |                       
         [Unit]                          
-        Description=Install Python RPM
+        Description=Install Python RPM 
         After=network-online.target
         Wants=network-online.target
+
         [Service]                       
         Type=oneshot                                                             
-        ExecStart=/usr/bin/rpm-ostree install python3                    
+        ExecStartPre=/usr/bin/rpm-ostree install python3                    
+        ExecStart=/usr/sbin/reboot
         ExecStartPost=/usr/bin/systemctl disable install-python.service
+
         [Install]
         WantedBy=multi-user.target
 
