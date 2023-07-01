@@ -4,8 +4,6 @@ passwd:
   users:
     - name: megacorp
       ssh_authorized_keys:
-        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHMgc7bhCmAgYvB9I9P9xUyftjcrq/EI6LgiUgJmcNlX
-        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBwhxBF/rXQThpwyRCdfJGdlQpig6EtFQEqFPROGl/jH
       groups:
         - "wheel"
       password_hash: $y$j9T$IQP78KGxD6zll8X1IpO381$u85joH0LBE2exJGeYm4y1DzeYvY1pKkJhvUlxCBomu3
