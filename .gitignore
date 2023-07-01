@@ -2,6 +2,12 @@
 nginx/swagdata/*
 !swagdata/nginx/site-confs/default.conf
 
+# Environment variables
 .env
 
+# For ignition config
 config.ign
+
+# For ansible testing
+playbook.yml
+inventory
