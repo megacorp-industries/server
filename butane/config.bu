@@ -11,11 +11,12 @@ passwd:
         - "wheel"
       password_hash: $y$j9T$IQP78KGxD6zll8X1IpO381$u85joH0LBE2exJGeYm4y1DzeYvY1pKkJhvUlxCBomu3
       #password is changeme
+
 systemd:
   units:
     - name: serial-getty@ttyS0.service
       dropins:
-      - name: autologin-core.conf
+      - name: autologin-megacorp.conf
         contents: |
           [Service]
           # Override Execstart in main unit
@@ -23,6 +24,19 @@ systemd:
           # Add new Execstart with `-` prefix to ignore failure
           ExecStart=-/usr/sbin/agetty --autologin megacorp --noclear %I $TERM
           TTYVTDisallocate=no
+    - name: install-python.service
+      enabled: true
+      contents: |                       
+        [Unit]                          
+        Description=Install Python RPM                                             After=network-online.target
+        Wants=network-online.target
+        [Service]                       
+        Type=oneshot                                                             
+        ExecStart=/usr/bin/rpm-ostree install python3                    
+        ExecStartPost=/usr/bin/systemctl disable install-python.service
+        [Install]
+        WantedBy=multi-user.target
+
 storage:
   files:
     - path: /etc/hostname
