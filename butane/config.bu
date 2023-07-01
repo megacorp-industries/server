@@ -34,7 +34,7 @@ systemd:
 
         [Service]                       
         Type=oneshot                                                             
-        ExecStartPre=/usr/bin/rpm-ostree install python3                    
+        ExecStart=/usr/bin/rpm-ostree install python3                    
         ExecStart=/usr/sbin/reboot
         ExecStartPost=/usr/bin/systemctl disable install-python.service
 
