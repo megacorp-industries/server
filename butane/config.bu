@@ -46,7 +46,7 @@ storage:
       mode: 0644
       contents:
         inline: |
-          kubemaster
+          coreos
     - path: /etc/profile.d/systemd-pager.sh
       mode: 0644
       contents:
