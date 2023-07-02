@@ -1,3 +1,5 @@
 - src: https://github.com/megacorp-industries/ansible-role-ostree-setup
 
 - src: https://github.com/megacorp-industries/ansible-role-kubernetes-worker
+
+- src: https://github.com/megacorp-industries/ansible-role-nfs-setup
