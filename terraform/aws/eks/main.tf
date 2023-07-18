@@ -1,6 +1,6 @@
 provider "aws" {
   region  = var.region
-  profile = ""
+  profile = var.profile
 }
 
 data "aws_availability_zones" "available" {}
