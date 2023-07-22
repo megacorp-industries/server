@@ -1,7 +1,7 @@
 #!/bin/sh
 
 IGN_CONFIG=/var/lib/libvirt/images/config.ign
-IMAGE=/var/lib/libvirt/images/coreos38.qcow2
+IMAGE=/var/lib/libvirt/images/coreos.qcow2
 VM_NAME=worker$1
 VCPUS=2
 RAM_MB=4096
