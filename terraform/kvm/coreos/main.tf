@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    libvirt = {
+      source = "dmacvicar/libvirt"
+    }
+  }
+}
+
 provider "libvirt" {
   uri = "qemu:///system"
 }
@@ -10,7 +18,7 @@ resource "libvirt_ignition" "ignition" {
 resource "libvirt_domain" "coreos_machine" {
   name             = "coreosMachine"
   coreos_ignition  = libvirt_ignition.ignition.id
-  memory           = "2000"
+  memory           = "2048"
   vcpu             = 1
 
   disk {
