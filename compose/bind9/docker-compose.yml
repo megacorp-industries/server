@@ -13,3 +13,4 @@ services:
       - "953:953/tcp"
     volumes:
       - ./config:/etc/bind
+    restart: unless-stopped
