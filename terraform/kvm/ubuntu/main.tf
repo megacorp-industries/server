@@ -10,8 +10,8 @@ provider "libvirt" {
   uri = "qemu:///system"
 }
 
-resource "libvirt_volume" "ubuntu_volume" {
-  name   = "ubuntuVolume"
+resource "libvirt_volume" "cloud_img" {
+  name   = "cloudImg"
   # source = "https://cloud-images.ubuntu.com/releases/22.10/release/ubuntu-22.10-server-cloudimg-amd64.img"
   source = "/var/lib/libvirt/images/ubuntu.img"
   format = "qcow2"
@@ -58,7 +58,7 @@ resource "libvirt_domain" "ubuntu_domain" {
   }
 
   disk {
-    volume_id = libvirt_volume.ubuntu_volume.id
+    volume_id = libvirt_volume.cloud_img.id
   }
 
   graphics {
