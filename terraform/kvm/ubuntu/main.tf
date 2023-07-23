@@ -3,18 +3,14 @@ terraform {
     libvirt = {
       source = "dmacvicar/libvirt"
     }
+    random = {
+      source = "hashicorp/random"
+    }
   }
 }
 
 provider "libvirt" {
   uri = "qemu:///system"
-}
-
-resource "libvirt_volume" "cloud_img" {
-  name   = "cloudImg"
-  # source = "https://cloud-images.ubuntu.com/releases/22.10/release/ubuntu-22.10-server-cloudimg-amd64.img"
-  source = "/var/lib/libvirt/images/ubuntu.img"
-  format = "qcow2"
 }
 
 data "template_file" "user_data" {
@@ -25,18 +21,35 @@ data "template_file" "network_config" {
   template = file("${path.module}/network_config.cfg")
 }
 
+resource "random_string" "generator" {
+  length  = 4
+  special = false
+  lower   = false
+}
+
+resource "libvirt_volume" "ubuntu_volume" {
+  name   = "${var.identity}-${random_string.generator.id}"
+  # source = "https://cloud-images.ubuntu.com/releases/22.10/release/ubuntu-22.10-generator-cloudimg-amd64.img"
+  source = "${var.imgPath}"
+  format = "qcow2"
+}
+
 resource "libvirt_cloudinit_disk" "cloud_init" {
-  name           = "cloud_init.iso"
+  name           = "${var.identity}-init-${random_string.generator.id}"
   user_data      = data.template_file.user_data.rendered
   network_config = data.template_file.network_config.rendered
 }
 
 resource "libvirt_domain" "ubuntu_domain" {
-  name   = "ubuntuMachine"
-  memory = "2048"
-  vcpu   = 1
+  name   = "${var.identity}-${random_string.generator.id}"
+  memory = "4096"
+  vcpu   = 2
 
   cloudinit = libvirt_cloudinit_disk.cloud_init.id
+
+  disk {
+    volume_id = libvirt_volume.ubuntu_volume.id
+  }
 
   network_interface {
     bridge = "br0"
@@ -55,10 +68,6 @@ resource "libvirt_domain" "ubuntu_domain" {
     type        = "pty"
     target_type = "virtio"
     target_port = "1"
-  }
-
-  disk {
-    volume_id = libvirt_volume.cloud_img.id
   }
 
   graphics {
