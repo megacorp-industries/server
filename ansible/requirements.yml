@@ -3,3 +3,5 @@
 - src: https://github.com/megacorp-industries/ansible-role-silverblue-setup
 
 - src: https://github.com/megacorp-industries/ansible-role-libvirt-setup
+
+- src: https://github.com/gantsign/ansible-role-golang.git
