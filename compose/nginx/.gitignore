@@ -1,0 +1,3 @@
+# See 'https://stackoverflow.com/questions/5533050/gitignore-exclude-folder-but-include-specific-subfolder' for below explanation
+swagdata/*
+!swagdata/nginx/site-confs/default.conf
