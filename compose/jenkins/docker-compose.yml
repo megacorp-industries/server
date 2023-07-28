@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  jenkins:
+    container_name: jenkins
+    image: jenkins:jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
