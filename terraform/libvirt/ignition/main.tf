@@ -13,41 +13,31 @@ provider "libvirt" {
   uri = "qemu:///system"
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/cloud_init.cfg")
-}
-
-data "template_file" "network_config" {
-  template = file("${path.module}/network_config.cfg")
-}
-
 resource "random_string" "generator" {
   length  = 2
   special = false
   lower   = false
 }
 
-resource "libvirt_volume" "cloud_init_volume" {
+resource "libvirt_ignition" "ignition" {
+  name    = "config.ign"
+  content = var.ignitionfile
+}
+
+resource "libvirt_volume" "ignition_volume" {
   name   = "${var.identity}-${random_string.generator.id}"
   source = "${var.imgPath}"
   format = "qcow2"
 }
 
-resource "libvirt_cloudinit_disk" "cloud_init" {
-  name           = "${var.identity}-init-${random_string.generator.id}"
-  user_data      = data.template_file.user_data.rendered
-  network_config = data.template_file.network_config.rendered
-}
-
-resource "libvirt_domain" "cloud_init_domain" {
+resource "libvirt_domain" "ignition_domain" {
   name   = "${var.identity}-${random_string.generator.id}"
   memory = "2048"
   vcpu   = 1
 
-  cloudinit = libvirt_cloudinit_disk.cloud_init.id
 
   disk {
-    volume_id = libvirt_volume.cloud_init_volume.id
+    volume_id = libvirt_volume.ignition_volume.id
   }
 
   network_interface {
