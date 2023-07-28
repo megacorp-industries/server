@@ -7,5 +7,5 @@ variable "identity" {
 variable "imgPath" {
   description = "Path to existing base QEMU img file"
   type        = string
-  default     = "/var/lib/libvirt/images/example.qcow2"
+  default     = "https://cloud-images.ubuntu.com/releases/23.04/release/ubuntu-23.04-server-cloudimg-amd64.img"
 }
