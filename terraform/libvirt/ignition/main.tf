@@ -19,9 +19,13 @@ resource "random_string" "generator" {
   lower   = false
 }
 
-resource "libvirt_ignition" "ignition" {
-  name    = "config.ign"
-  content = var.ignitionfile
+data "template_file" "ignition_data" {
+  template = file("${path.module}/config.ign")
+}
+
+resource "libvirt_ignition" "ignition_config" {
+  name   = "${var.identity}-${random_string.generator.id}-ign"
+  content = data.template_file.ignition_data.rendered
 }
 
 resource "libvirt_volume" "ignition_volume" {
@@ -34,7 +38,8 @@ resource "libvirt_domain" "ignition_domain" {
   name   = "${var.identity}-${random_string.generator.id}"
   memory = "2048"
   vcpu   = 1
-
+  
+  coreos_ignition = libvirt_ignition.ignition_config.id
 
   disk {
     volume_id = libvirt_volume.ignition_volume.id

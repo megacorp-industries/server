@@ -1,7 +1,7 @@
 variable "identity" {
   description = "name to identify all managed resources"
   type        = string
-  default     = "cloud-init"
+  default     = "ignition"
 }
 
 variable "imgPath" {
